@@ -110,18 +110,115 @@ Created on Fri Nov  6 09:11:53 2026
 # print(char1 == char2)
 # =============================================================================
 
-class Arm():
-    def __init__(self, type, function):
-        self.type = type
-        self.function = function
+# =============================================================================
+# class Arm():
+#     def __init__(self, type, function):
+#         self.type = type
+#         self.function = function
+# 
+# class Robot():
+#     def __init__(self, name, arm):
+#         self.name = name
+#         self.arm = arm
+#     def show_arm(self):
+#         print(f'{self.name}擁有一隻{self.arm.type}的手臂，功能是{self.arm.function}')
+# 
+# arm = Arm("鐵製", "舉重")
+# bot = Robot("RX-78", arm)
+# bot.show_arm()
+# =============================================================================
 
-class Robot():
-    def __init__(self, name, arm):
+# =============================================================================
+# class zooCounter():
+#     total_animals = 0
+#     def __init__(self):
+#         zooCounter.total_animals += 1
+#     @classmethod
+#     def show_count(cls):
+#         print(f"現在有{cls.total_animals}隻動物")
+#     @staticmethod
+#     def announcement():
+#         print("\n動物園正在廣播...")
+#         
+# zooCounter.announcement()
+# a = zooCounter()
+# zooCounter.show_count()
+# b = zooCounter()
+# zooCounter.show_count()
+# =============================================================================
+
+class TooWeakException(Exception):
+    pass
+
+class Creature():
+    def __init__(self, name, power):
         self.name = name
-        self.arm = arm
-    def show_arm(self):
-        print(f'{self.name}擁有一隻{self.arm.type}的手臂，功能是{self.arm.function}')
+        self.power = power
 
-arm = Arm("鐵製", "舉重")
-bot = Robot("RX-78", arm)
-bot.show_arm()
+    def check_power(self):
+        if self.power < 50:
+            raise TooWeakException(f"{self.name} 力量太低，只有{self.power}，攻擊失敗!")
+
+    def attack(self):
+        print(f"{self.name} 發動攻擊!")
+        self.check_power()
+
+class Dragon(Creature):
+    def __init__(self, name, power):
+        super().__init__(name, power)
+    def attack(self):
+        print(f"{self.name} 噴出龍焰!")
+        self.check_power()
+        
+class Phoenix(Creature):
+    def __init__(self, name, power):
+        super().__init__(name, power)
+    def attack(self):
+        print(f"{self.name} 釋放鳳凰烈焰!")
+        self.check_power()
+
+class Trainer:
+    count = 0
+    def __init__(self, name):
+        self.name = name
+        self.pets = []
+        
+    def add_pet(self, pet):
+        self.pets.append(pet)
+    
+    def train_all(self):
+        for pet in self.pets:
+            try:
+                pet.attack()
+            except TooWeakException as e:
+                print(e)
+            else:
+                print(f"{pet.name} 攻擊成功!")
+                Trainer.count += 1
+
+    @classmethod
+    def show_trained_count(cls):
+        return cls.count
+    
+    @staticmethod
+    def show_tip():
+        print("攻擊會消耗魔力，小心使用!")
+
+pet1 = Dragon("小火龍", 50)
+pet2 = Phoenix("鳳凰", 40)
+
+trainer = Trainer("哈利")
+trainer.add_pet(pet1)
+trainer.add_pet(pet2)
+
+trainer.show_tip()
+
+trainer.train_all()
+
+print(f"成功訓練的寵物數：{Trainer.show_trained_count()}")
+
+
+
+
+
+
