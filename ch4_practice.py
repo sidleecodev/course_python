@@ -35,3 +35,4 @@ if not os.path.exists(file_path):
 
 with open(file_path, "a", encoding="utf-8", newline='') as f:
     f.write(f"{timestamp},{mood}\n")
+    
